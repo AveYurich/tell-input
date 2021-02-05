@@ -4,7 +4,8 @@
   "description": "tel-input",
   "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint src/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/AveYurich/tell-input/issues"
   },
-  "homepage": "https://github.com/AveYurich/tell-input#readme"
+  "homepage": "https://github.com/AveYurich/tell-input#readme",
+  "devDependencies": {
+    "eslint": "^7.19.0"
+  }
 }
