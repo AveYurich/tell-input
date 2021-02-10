@@ -8,6 +8,7 @@ class TellInput {
     this.countriesSelect = null
     this.input = null
     this.currentCountry = { code: 'US' }
+    this.countyCodeNode = null
     this.triangle = null
 
     this._initLayout(source, containerClass)
@@ -23,9 +24,11 @@ class TellInput {
     this.countriesSelect = this._getCountriesSelect()
     this.triangle = this._getTriangle()
     this.input = this._getInput()
+    this.countyCodeNode = this._getCountyCodeNode(this.currentCountry.code)
 
     this.container.appendChild(this.countriesSelect)
     this.container.appendChild(this.input)
+    this.countriesSelect.appendChild(this.countyCodeNode)
     this.countriesSelect.appendChild(this.triangle)
 
     source.parentNode.replaceChild(this.container, source)
@@ -40,9 +43,13 @@ class TellInput {
   _getCountriesSelect () {
     // create countriesSelect
     const select = document.createElement('div')
-    select.appendChild(document.createTextNode(this.currentCountry.code))
     select.classList = 'tell-input__countries-button'
     return select
+  }
+  _getCountyCodeNode (countryCode) {
+    const node = document.createElement('span')
+    node.appendChild(document.createTextNode(countryCode))
+    return node
   }
 
   _getTriangle () {
