@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/AveYurich/tell-input#readme",
   "devDependencies": {
-    "eslint": "^7.19.0",
-    "saas": "^1.0.0"
+    "eslint": "^7.19.0"
   }
 }
