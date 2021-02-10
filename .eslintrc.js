@@ -1,13 +1,18 @@
 module.exports = {
-    "env": {
+    env: {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "cypress/globals": true
     },
-    "extends": "eslint:recommended",
-    "parserOptions": {
+    extends: [
+      "eslint:recommended",
+      "plugin:cypress/recommended"
+    ],
+    parserOptions: {
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "rules": {
-    }
+    rules: {
+    },
+    plugins: ["cypress"]
 }
