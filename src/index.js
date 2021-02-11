@@ -3,7 +3,6 @@ import { setAttributes } from './utils/helper.js'
 const SVG_NS = 'http://www.w3.org/2000/svg'
 const COUNTRIES_ACTIVE_CLASS = 'tell-input_countries-list-open'
 
-
 const countriesList = [
   { short: 'BD', name: 'Bangladesh', code: '880' },
   { short: 'UA', name: 'Ukraine', code: '380' },
@@ -30,9 +29,9 @@ class TellInput {
     this.countriesListNode = null
 
     // props
-    this.currentCountry = { code: 'US' }
+    this.currentCountry = { short: 'US', name: 'United States', code: '(201)' }
     this.isCountiesListOpen = false
-    this.subscribers = new Map()
+    this.onCountrySelectSubscribers = new Map()
 
     this._initLayout(source, containerClass)
   }
@@ -47,7 +46,7 @@ class TellInput {
     this.countriesSelect = this._getCountriesSelectButton()
     this.triangle = this._getTriangle()
     this.input = this._getInput()
-    this.countyCodeNode = this._getCountyCodeNode(this.currentCountry.code)
+    this.countyCodeNode = this._getCountyCodeNode(this.currentCountry.short)
     this.countriesListNode = this._getCountriesList()
 
     // combine all blocks to tellInput structure
@@ -127,21 +126,31 @@ class TellInput {
   _countriesSelectButtonClick () {
     this.isCountiesListOpen = !this.isCountiesListOpen
     if (this.isCountiesListOpen) {
-      this.container.classList.add(COUNTRIES_ACTIVE_CLASS)
+      this._openCountriesList()
     } else {
-      this.container.classList.remove(COUNTRIES_ACTIVE_CLASS)
+      this._closeCountriesList()
     }
   }
 
   _countriesListClick ($event) {
-    const countryId = $event.target.getAttribute('data-country-index')
-    if (countryId) {
-      this._setNewCountry(countryId)
-
-      // TODO: emit subscribers
-
+    const countryIndex = $event.target.getAttribute('data-country-index')
+    if (countryIndex) {
+      const country = this._getCountry(countryIndex)
+      this._setNewCountry(country)
+      this._emitSubscribers(country)
       this._closeCountriesList()
     }
+  }
+
+  _emitSubscribers (value) {
+    this.onCountrySelectSubscribers.forEach(subscriber => {
+      subscriber(value)
+    })
+  }
+
+  _openCountriesList () {
+    this.isCountiesListOpen = true
+    this.container.classList.add(COUNTRIES_ACTIVE_CLASS)
   }
 
   _closeCountriesList () {
@@ -149,16 +158,25 @@ class TellInput {
     this.container.classList.remove(COUNTRIES_ACTIVE_CLASS)
   }
 
-  _setNewCountry (index) {
-    console.log('this.countriesListNode[index]', countriesList[index])
+  _getCountry (index) {
+    return countriesList[index] || null
+  }
+
+  _setNewCountry (country) {
+    this.currentCountry = country
+    this.countyCodeNode.innerHTML = this.currentCountry.short
   }
 
   /**
    * PUBLIC METHODS
    **/
 
-  onCountrySelect () {
-    //  TODO: implement me
+  onCountrySelect (subscriber) {
+    this.onCountrySelectSubscribers.set(subscriber, subscriber)
+  }
+
+  removeOnCountrySelectSubscriber (subscriber) {
+    this.onCountrySelectSubscribers.delete(subscriber)
   }
 
 }

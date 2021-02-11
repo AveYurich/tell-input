@@ -11,6 +11,9 @@
   border-bottom-left-radius: 0;
   border-bottom: 1px solid inherit;
 }
+.tell-input_countries-list-open .tell-input__countries-button svg {
+  transform: rotate(180deg);
+}
 .tell-input_countries-list-open .tell-input__input {
   border: 1px solid inherit;
   border-bottom-right-radius: 0;
