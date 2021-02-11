@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run preproces",
     "preproces": "sass --watch src/main.scss src/main.css",
-    "cypress:open": "cypress open",
+    "cy": "cypress open",
     "lint": "npx eslint src"
   },
   "repository": {

@@ -1,14 +1,34 @@
+$background-color: white;
 $border-color: #9E9E9E;
-$select-button-text-color: #4C4C4C;
+$active-text-color: #4C4C4C;
+$hover-background-color: rgba(158, 158, 158, 0.5);
 
 .tell-input {
   width: 200px;
   display: flex;
   height: 45px;
-  &__countries-button, &__input {
-    background: white;
+  position: relative;
+
+  &_countries-list-open {
+    .tell-input__countries-list {
+      display: block;
+    }
+    .tell-input__countries-button {
+      border-bottom-left-radius: 0;
+      border-bottom: 1px solid inherit;
+    }
+    .tell-input__input {
+      border: 1px solid inherit;
+      border-bottom-right-radius: 0;
+    }
   }
+
+  &__countries-button, &__input {
+    background: $background-color;
+  }
+
   &__countries-button {
+    user-select: none;
     box-sizing: border-box;
     padding: 0 13px;
     display: flex;
@@ -16,7 +36,7 @@ $select-button-text-color: #4C4C4C;
     align-items: center;
     width: 30%;
     font-size: 16px;
-    color: $select-button-text-color;
+    color: $active-text-color;
     border-left: 1px solid $border-color;
     border-top: 1px solid $border-color;
     border-bottom: 1px solid $border-color;
@@ -24,7 +44,38 @@ $select-button-text-color: #4C4C4C;
     border-top-left-radius: 4px;
     cursor: pointer;
   }
+
+  &__countries-list {
+    color: $active-text-color;
+    box-sizing: border-box;
+    background: $background-color;
+    position: absolute;
+    min-width: 100%;
+    top: calc(100% - 2px);
+    display: none;
+    border: 1px solid $border-color;
+    ul {
+      padding: 0;
+      margin: 0;
+      max-height: 100px;
+      overflow-y: auto;
+      li {
+        padding-left: 13px;
+        cursor: pointer;
+        list-style-type: none;
+        height: 20px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        &:hover {
+          background: $hover-background-color;
+        }
+      }
+    }
+  }
+
   &__input {
+    color: $active-text-color;
     width: 70%;
     font-size: 16px;
     padding: 0 13px;

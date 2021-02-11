@@ -1,15 +1,38 @@
 import { setAttributes } from './utils/helper.js'
 
 const SVG_NS = 'http://www.w3.org/2000/svg'
+const COUNTRIES_ACTIVE_CLASS = 'tell-input_countries-list-open'
+
+
+const countriesList = [
+  { short: 'BD', name: 'Bangladesh', code: '880' },
+  { short: 'UA', name: 'Ukraine', code: '380' },
+  { short: 'UA', name: 'Ukraine', code: '380' },
+  { short: 'UA', name: 'Ukraine', code: '380' },
+  { short: 'UA', name: 'Ukraine', code: '380' },
+  { short: 'UA', name: 'Ukraine', code: '380' },
+  { short: 'UA', name: 'Ukraine', code: '380' },
+  { short: 'UA', name: 'Ukraine', code: '380' },
+  { short: 'UA', name: 'Ukraine', code: '380' },
+  { short: 'UA', name: 'Ukraine', code: '380' },
+  { short: 'UA', name: 'Ukraine', code: '380' },
+  { short: 'UA', name: 'Ukraine', code: '380' }
+]
 
 class TellInput {
   constructor(source, containerClass = '') {
+    // tellInput nodes
     this.container = null
     this.countriesSelect = null
     this.input = null
-    this.currentCountry = { code: 'US' }
     this.countyCodeNode = null
     this.triangle = null
+    this.countriesListNode = null
+
+    // props
+    this.currentCountry = { code: 'US' }
+    this.isCountiesListOpen = false
+    this.subscribers = new Map()
 
     this._initLayout(source, containerClass)
   }
@@ -19,33 +42,56 @@ class TellInput {
    **/
 
   _initLayout (source, containerClass) {
-    // create container and replace with original source
+    // create all main blocks
     this.container = this._getContainer(containerClass)
-    this.countriesSelect = this._getCountriesSelect()
+    this.countriesSelect = this._getCountriesSelectButton()
     this.triangle = this._getTriangle()
     this.input = this._getInput()
     this.countyCodeNode = this._getCountyCodeNode(this.currentCountry.code)
+    this.countriesListNode = this._getCountriesList()
 
+    // combine all blocks to tellInput structure
     this.container.appendChild(this.countriesSelect)
+    this.container.appendChild(this.countriesListNode)
     this.container.appendChild(this.input)
     this.countriesSelect.appendChild(this.countyCodeNode)
     this.countriesSelect.appendChild(this.triangle)
 
-    source.parentNode.replaceChild(this.container, source)
+    // set listeners
+    this.countriesSelect.onclick = this._countriesSelectButtonClick.bind(this)
+    this.countriesListNode.onclick = this._countriesListClick.bind(this)
+
+    if (source) source.parentNode.replaceChild(this.container, source)
+    return this.container
   }
 
   _getContainer (containerClass) {
     const container = document.createElement('div')
-    container.classList = `tell-input ${containerClass}`
+    container.className = `tell-input ${containerClass}`
     return container
   }
 
-  _getCountriesSelect () {
-    // create countriesSelect
+  _getCountriesList () {
+    const countriesListNode = document.createElement('div')
+    const ul = document.createElement('ul')
+    countriesList.forEach((country, index) => {
+      const countryNode = document.createElement('li')
+      countryNode.setAttribute('data-country-index', index.toString())
+      const countryNodeText = document.createTextNode(`${country.name || ''} ${country.code || ''}`)
+      countryNode.appendChild(countryNodeText)
+      ul.appendChild(countryNode)
+    })
+    countriesListNode.classList.add('tell-input__countries-list')
+    countriesListNode.appendChild(ul)
+    return countriesListNode
+  }
+
+  _getCountriesSelectButton () {
     const select = document.createElement('div')
-    select.classList = 'tell-input__countries-button'
+    select.classList.add('tell-input__countries-button')
     return select
   }
+
   _getCountyCodeNode (countryCode) {
     const node = document.createElement('span')
     node.appendChild(document.createTextNode(countryCode))
@@ -71,12 +117,48 @@ class TellInput {
   }
 
   _getInput () {
-    // create number input
     const input = document.createElement('input')
     input.type = 'text'
-    input.classList = 'tell-input__input'
+    input.classList.add('tell-input__input')
     input.placeholder = '(201) 555-5555'
     return input
+  }
+
+  _countriesSelectButtonClick () {
+    this.isCountiesListOpen = !this.isCountiesListOpen
+    if (this.isCountiesListOpen) {
+      this.container.classList.add(COUNTRIES_ACTIVE_CLASS)
+    } else {
+      this.container.classList.remove(COUNTRIES_ACTIVE_CLASS)
+    }
+  }
+
+  _countriesListClick ($event) {
+    const countryId = $event.target.getAttribute('data-country-index')
+    if (countryId) {
+      this._setNewCountry(countryId)
+
+      // TODO: emit subscribers
+
+      this._closeCountriesList()
+    }
+  }
+
+  _closeCountriesList () {
+    this.isCountiesListOpen = false
+    this.container.classList.remove(COUNTRIES_ACTIVE_CLASS)
+  }
+
+  _setNewCountry (index) {
+    console.log('this.countriesListNode[index]', countriesList[index])
+  }
+
+  /**
+   * PUBLIC METHODS
+   **/
+
+  onCountrySelect () {
+    //  TODO: implement me
   }
 
 }
