@@ -55,7 +55,8 @@
   overflow-y: auto;
 }
 .tell-input__countries-list ul li {
-  padding-left: 13px;
+  min-width: max-content;
+  padding: 0 13px;
   cursor: pointer;
   list-style-type: none;
   height: 20px;

@@ -63,7 +63,8 @@ $hover-background-color: rgba(158, 158, 158, 0.5);
       max-height: 100px;
       overflow-y: auto;
       li {
-        padding-left: 13px;
+        min-width: max-content;
+        padding: 0 13px;
         cursor: pointer;
         list-style-type: none;
         height: 20px;

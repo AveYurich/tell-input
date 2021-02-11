@@ -1,22 +1,8 @@
+import countriesList from './countriesList.js'
 import { setAttributes } from './utils/helper.js'
 
 const SVG_NS = 'http://www.w3.org/2000/svg'
 const COUNTRIES_ACTIVE_CLASS = 'tell-input_countries-list-open'
-
-const countriesList = [
-  { short: 'BD', name: 'Bangladesh', code: '880' },
-  { short: 'UA', name: 'Ukraine', code: '380' },
-  { short: 'UA', name: 'Ukraine', code: '380' },
-  { short: 'UA', name: 'Ukraine', code: '380' },
-  { short: 'UA', name: 'Ukraine', code: '380' },
-  { short: 'UA', name: 'Ukraine', code: '380' },
-  { short: 'UA', name: 'Ukraine', code: '380' },
-  { short: 'UA', name: 'Ukraine', code: '380' },
-  { short: 'UA', name: 'Ukraine', code: '380' },
-  { short: 'UA', name: 'Ukraine', code: '380' },
-  { short: 'UA', name: 'Ukraine', code: '380' },
-  { short: 'UA', name: 'Ukraine', code: '380' }
-]
 
 class TellInput {
   constructor(source, containerClass = '') {
@@ -29,7 +15,7 @@ class TellInput {
     this.countriesListNode = null
 
     // props
-    this.currentCountry = { short: 'US', name: 'United States', code: '(201)' }
+    this.currentCountry = { name: 'Afghanistan', isoCode: 'US', dialCode: '+93', flag: 'https://www.countryflags.io/AF/flat/64.png' }
     this.isCountiesListOpen = false
     this.onCountrySelectSubscribers = new Map()
 
@@ -46,7 +32,7 @@ class TellInput {
     this.countriesSelect = this._getCountriesSelectButton()
     this.triangle = this._getTriangle()
     this.input = this._getInput()
-    this.countyCodeNode = this._getCountyCodeNode(this.currentCountry.short)
+    this.countyCodeNode = this._getCountyCodeNode(this.currentCountry.isoCode)
     this.countriesListNode = this._getCountriesList()
 
     // combine all blocks to tellInput structure
@@ -76,7 +62,7 @@ class TellInput {
     countriesList.forEach((country, index) => {
       const countryNode = document.createElement('li')
       countryNode.setAttribute('data-country-index', index.toString())
-      const countryNodeText = document.createTextNode(`${country.name || ''} ${country.code || ''}`)
+      const countryNodeText = document.createTextNode(`${country.name || ''} ${country.dialCode || ''}`)
       countryNode.appendChild(countryNodeText)
       ul.appendChild(countryNode)
     })
@@ -164,7 +150,7 @@ class TellInput {
 
   _setNewCountry (country) {
     this.currentCountry = country
-    this.countyCodeNode.innerHTML = this.currentCountry.short
+    this.countyCodeNode.innerHTML = this.currentCountry.isoCode
   }
 
   /**
