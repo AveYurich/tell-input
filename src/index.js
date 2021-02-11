@@ -15,7 +15,7 @@ class TellInput {
     this.countriesListNode = null
 
     // props
-    this.currentCountry = { name: 'Afghanistan', isoCode: 'US', dialCode: '+93', flag: 'https://www.countryflags.io/AF/flat/64.png' }
+    this.currentCountry = countriesList[0]
     this.isCountiesListOpen = false
     this.onCountrySelectSubscribers = new Map()
 
@@ -45,6 +45,7 @@ class TellInput {
     // set listeners
     this.countriesSelect.onclick = this._countriesSelectButtonClick.bind(this)
     this.countriesListNode.onclick = this._countriesListClick.bind(this)
+    this.input.addEventListener('input', this._onInputEvent.bind(this))
 
     if (source) source.parentNode.replaceChild(this.container, source)
     return this.container
@@ -137,11 +138,13 @@ class TellInput {
   _openCountriesList () {
     this.isCountiesListOpen = true
     this.container.classList.add(COUNTRIES_ACTIVE_CLASS)
+    document.addEventListener( 'keyup', this._onKeyBoardEvent.bind(this))
   }
 
   _closeCountriesList () {
     this.isCountiesListOpen = false
     this.container.classList.remove(COUNTRIES_ACTIVE_CLASS)
+    document.removeEventListener( 'keyup', this._onKeyBoardEvent)
   }
 
   _getCountry (index) {
@@ -151,6 +154,14 @@ class TellInput {
   _setNewCountry (country) {
     this.currentCountry = country
     this.countyCodeNode.innerHTML = this.currentCountry.isoCode
+  }
+
+  _onInputEvent () {
+    this._closeCountriesList()
+  }
+
+  _onKeyBoardEvent () {
+  //  TODO: implement me
   }
 
   /**
